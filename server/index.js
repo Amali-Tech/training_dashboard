@@ -47,8 +47,35 @@ app.get("/users", async(req, res) => {
     }
 });
 
-// update a user
+// reset password
+app.put("/users/reset/:email", async(req, res) => {
+    try{
+        const { password } = req.body;
+        const { email } = req.params;
+        const resetPassword = await pool.query("UPDATE users SET password = $1 WHERE email = $2", [password, email]);
 
+        res.json("Password reset done");
+    } catch(err) {
+        console.error(err.message);
+    }
+});
+
+
+// update user status
+app.put("/users/:email", async(req, res) => {
+    try{
+        let { isActive } = req.body;
+        const { email } = req.params;
+
+        isActive === 1 ? true : false;
+
+        const modifyUser = await pool.query("UPDATE users SET isactive = $1 WHERE email = $2", [isActive, email]);
+
+        res.json("User has been updated");
+    } catch(err) {
+        console.error(err.message);
+    }
+});
 
 // delete a user
 app.delete("/users/:email", async(req, res) => {
