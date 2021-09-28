@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 // token
-let verifyToken = (req, res, next) => {
+let getToken = (req, res, next) => {
     const bearerHeader = req.headers['authorization'];
 
     // check if bearer is sent
@@ -38,10 +38,11 @@ app.post("/users", async(req, res, next) => {
         isActive === 1 ? true : false;
         isAdmin === 1 ? true : false;
         password = bcrypt.hashSync(password, 12);
-        const newUser = await pool.query("INSERT INTO users VALUES ($1, $2, $3, $4) RETURNING *", 
+        const newUser = await pool.query("INSERT INTO users VALUES ($1, $2, $3, $4) RETURNING email, isactive, isadmin", 
         [email, password, isActive, isAdmin]);
 
         res.json(newUser.rows[0]);
+
     } catch (err) {
         console.error(err.message);
         res.json({
@@ -56,7 +57,7 @@ app.post("/users", async(req, res, next) => {
 app.get("/users/:email", async(req, res, next) => {
     try{
         const { email } = req.params;
-        const allUser = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
+        const allUser = await pool.query("SELECT email, isactive, isadmin FROM users WHERE email = $1", [email]);
         res.json(allUser.rows[0]);
     } catch (err) {
         console.error(err.message);
@@ -71,7 +72,7 @@ app.get("/users/:email", async(req, res, next) => {
 // get all users
 app.get("/users", async(req, res, next) => {
     try{
-        const allUsers = await pool.query("SELECT * FROM users");
+        const allUsers = await pool.query("SELECT email, isactive, isadmin FROM users");
         res.json(allUsers.rows);
     } catch (err) {
         console.error(err.message);
@@ -191,9 +192,12 @@ app.post("/upload", async(req, res, next) => {
 // get trainee marks
 app.get("/trainee/:email", async(req, res, next) => {
     try{
+        const bearerHeader = req.headers['authorization'];
+
         const { email } = req.params;
 
         const traineeDetails = await pool.query("SELECT * FROM trainee WHERE email = $1", [email]);
+
         res.json({
             status: "success",
             message: traineeDetails.rows[0]
@@ -205,6 +209,47 @@ app.get("/trainee/:email", async(req, res, next) => {
             message: "Error fetching details."
         });
     }
+});
+
+app.post("/auth", async(req, res, next) => {
+    const userEmail = req.body.email;
+    const userPassword = req.body.password
+
+    const getUser = await pool.query("SELECT * FROM users WHERE email = $1", [userEmail]);
+    
+    if( getUser.rowCount === 1 ) {
+        const { email, password, isactive, isadmin } = getUser.rows[0];
+
+        bcrypt.compare(userPassword, password).then( doMatch => {
+
+            if(doMatch) {
+                const tkn = {token: jwt.sign({email, isadmin}, "secretkey"), email, isadmin}
+
+                res.json({
+                    status: "success",
+                    message: "details posted",
+                    tkn
+                });
+            } else {
+                res.json({
+                    status: "failure",
+                    message: "Username / password do not match"
+                });
+            }
+        }).catch( err => {
+            console.log(err);
+            res.json({
+                status: "failure",
+                message: "Unable to generate Token"
+            });
+        });
+    } else {
+        res.json({
+            status: "failure",
+            message: "Username / password do not match"
+        });
+    }
+
 });
 
 app.listen(5000, () => {
