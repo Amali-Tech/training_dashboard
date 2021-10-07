@@ -437,7 +437,8 @@ app.get("/trainee/:email", getToken, async(req, res, next) => {
 // login/authorization route
 app.post("/auth", async(req, res, next) => {
 
-    // get login details from the request body
+    try{
+         // get login details from the request body
     const userEmail = req.body.email;
     const userPassword = req.body.password
 
@@ -483,6 +484,12 @@ app.post("/auth", async(req, res, next) => {
             message: "Username / password do not match"
         });
     }
+    }catch(e){
+        console.log(e)
+        res.status(400).json(e);
+    }
+
+   
 
 });
 
