@@ -1,1 +1,1 @@
-module.exports.apiUrl = 'http://localhost:5000/';
+module.exports.apiUrl = 'https://training-dashboard.amalitech-dev.net/backend/';
