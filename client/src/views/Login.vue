@@ -20,6 +20,7 @@
 
 <script>
 import router from '../router/route';
+import apiUrl from '../api';
 
 export default {
   data() {
@@ -31,12 +32,13 @@ export default {
   methods: {
     async login() {
       const { email, password } = this;
+      console.log(apiUrl)
 
       if(email == "" || password == "") {
           alert("Email or password field is empty");
       }
       else {
-            const res = await fetch("http://localhost:5000/auth", {
+            const res = await fetch(`${apiUrl.apiUrl}auth`, {
                 method: "POST",
                 headers: {
                 "Content-Type": "application/json"

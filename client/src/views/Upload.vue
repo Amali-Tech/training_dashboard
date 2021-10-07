@@ -43,6 +43,7 @@
 <script>
     import Papa from 'papaparse';
     import router from '../router/route';
+    import apiUrl from '../api';
 
     export default {
         data() {
@@ -92,7 +93,7 @@
                         console.log(dataObjects);                                    
                         
                         (async function() {
-                            const res = await fetch('http://localhost:5000/upload/', {
+                            const res = await fetch(`${apiUrl.apiUrl}upload/`, {
                                 method: 'POST',
                                 headers: {
                                     'Authorization': token,

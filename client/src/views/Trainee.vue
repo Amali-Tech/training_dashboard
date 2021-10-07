@@ -136,6 +136,7 @@
 
 <script>
 import router from '../router/route';
+import apiUrl from '../api';
 export default {
     name: 'Trainee',
     data() {
@@ -157,7 +158,7 @@ export default {
             const stored = localStorage.getItem("token");
             const retrieved = JSON.parse(stored);
             const token = `Bearer ${retrieved.token}`;
-            const res = await fetch(`http://localhost:5000/trainee/${this.email}`, {
+            const res = await fetch(`${apiUrl.apiUrl}trainee/${this.email}`, {
                 headers: {
                     'Authorization': token,
                     'Content-type': "application/json"

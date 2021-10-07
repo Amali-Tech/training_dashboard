@@ -4,14 +4,14 @@ import Login from '../views/Login.vue';
 import Admin from '../views/Admin.vue';
 import Upload from '../views/Upload.vue';
 import Trainee from '../views/Trainee.vue';
-import App from '../App.vue';
+// import App from '../App.vue';
 
 
 const routes = [
     {
         path: "/",
         name: "Home",
-        component: App
+        component: Login
     },
     {
         path: "/login",

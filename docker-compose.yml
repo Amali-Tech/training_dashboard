@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  trainingfrontend:
+    image: trainingfrontend
+    build: 
+      context: ./client
+    ports:
+      - "8082:8082"
+    networks: 
+      - trainingfrontend
+      - trainingbackend
+    depends_on:
+      - trainingbackend
+  
+  trainingbackend:
+    image: trainingbackend
+    build:
+      context: ./server
+    networks: 
+      - trainingbackend
+    ports:
+      - 5000:5000
+
+networks: 
+  trainingfrontend:
+  trainingbackend:

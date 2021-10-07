@@ -170,6 +170,7 @@
 
 <script>
 import router from '../router/route';
+import apiUrl from '../api';
 
 export default {
     name: 'Trainee',
@@ -251,7 +252,7 @@ export default {
             const stored = localStorage.getItem("token");
             const retrieved = JSON.parse(stored);
             const token = `Bearer ${retrieved.token}`;
-            const res = await fetch(`http://localhost:5000/users`, {
+            const res = await fetch(`${apiUrl.apiUrl}users`, {
                 headers: {
                     'Authorization': token,
                     'Content-type': "application/json"
@@ -302,7 +303,7 @@ export default {
             const retrieved = JSON.parse(stored);
             const token = `Bearer ${retrieved.token}`;
             
-            const res = await fetch(`http://localhost:5000/users`, {
+            const res = await fetch(`${apiUrl.apiUrl}users`, {
                 method: "POST",
                 headers: {
                     'Authorization': token,
@@ -333,7 +334,7 @@ export default {
             const retrieved = JSON.parse(stored);
             const token = `Bearer ${retrieved.token}`;
 
-            const res = await fetch(`http://localhost:5000/users/${userEmail}`, {
+            const res = await fetch(`${apiUrl.apiUrl}users/${userEmail}`, {
                 method: "PUT",
                 headers: {
                     'Authorization': token,
@@ -355,7 +356,7 @@ export default {
             const retrieved = JSON.parse(stored);
             const token = `Bearer ${retrieved.token}`;
             
-            const res = await fetch(`http://localhost:5000/users/reset/${userEmail}`, {
+            const res = await fetch(`${apiUrl.apiUrl}users/reset/${userEmail}`, {
                 method: "PUT",
                 headers: {
                     'Authorization': token,
@@ -378,7 +379,7 @@ export default {
             const stored = localStorage.getItem("token");
             const retrieved = JSON.parse(stored);
             const token = `Bearer ${retrieved.token}`;
-            const res = await fetch(`http://localhost:5000/users/${user.email}`, {
+            const res = await fetch(`${apiUrl.apiUrl}users/${user.email}`, {
                 method: "DELETE",
                 headers: {
                     'Authorization': token,
