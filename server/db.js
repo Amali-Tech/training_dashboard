@@ -1,7 +1,7 @@
 require('dotenv').config({ path: '../.env' });
 const Pool = require('pg').Pool;
 
-// console.log(process.env)
+console.log(process.env)
 
 const pool = new Pool ({
     user: process.env.user,
